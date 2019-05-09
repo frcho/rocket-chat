@@ -8,8 +8,8 @@ services:
     volumes:
       - ./uploads:/app/uploads
     environment:
-      - PORT=3000
-      - ROOT_URL=${SCHEME}://${DOMAIN_NAME}
+      - PORT=${PORT}
+      - ROOT_URL=${SCHEME}://${DOMAIN_NAME}:${PORT}
       - MONGO_URL=mongodb://mongo:27017/rocketchat
       - MONGO_OPLOG_URL=mongodb://mongo:27017/local
 #       - MAIL_URL=smtp://smtp.email
@@ -18,10 +18,10 @@ services:
     depends_on:
       - mongo
     ports:
-      - 3000:3000         
+      - ${PORT}:3000         
     labels:
       - "traefik.backend=rocketchat"
-      - "traefik.port=3000"
+      - "traefik.port=${PORT}"
       - "traefik.frontend.rule=Host:${DOMAIN_NAME}"
   mongo:
     image: mongo:4.0
