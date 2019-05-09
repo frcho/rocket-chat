@@ -21,7 +21,9 @@ services:
       - ${PORT}:3000         
     labels:
       - "traefik.backend=rocketchat"
+      - "traefik.enable=true"
       - "traefik.port=${PORT}"
+      - "traefik.frontend.redirect.entryPoint:${SCHEME}"      
       - "traefik.frontend.rule=Host:${DOMAIN_NAME}"
   mongo:
     image: mongo:4.0
