@@ -17,8 +17,8 @@ services:
 #       - HTTPS_PROXY=http://proxy.domain.com
     depends_on:
       - mongo
-    ports:
-      - ${PORT}:3000         
+    # ports:
+    #   - ${PORT}:3000         
     labels:
       - "traefik.backend=rocketchat"
       - "traefik.enable=true"
