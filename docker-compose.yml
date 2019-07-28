@@ -15,15 +15,18 @@ services:
 #       - MAIL_URL=smtp://smtp.email
 #       - HTTP_PROXY=http://proxy.domain.com
 #       - HTTPS_PROXY=http://proxy.domain.com
+    networks:
+      - rocket
+      - app
     depends_on:
       - mongo
-    # ports:
-    #   - ${PORT}:3000         
+#   ports:
+#     - ${PORT}:3000         
     labels:
       - "traefik.backend=rocketchat"
       - "traefik.enable=true"
       - "traefik.port=${PORT}"
-      - "traefik.frontend.redirect.entryPoint:${SCHEME}"      
+      - "traefik.frontend.redirect.entryPoint:${SCHEME}"
       - "traefik.frontend.rule=Host:${DOMAIN_NAME}"
   mongo:
     image: mongo:4.0
@@ -32,6 +35,9 @@ services:
      - ./data/db:/data/db
      - ./data/dump:/dump
     command: mongod --smallfiles --oplogSize 128 --replSet rs0 --storageEngine=mmapv1
+    networks:
+     - rocket
+     - app
     labels:
       - "traefik.enable=false"
 
@@ -63,7 +69,7 @@ services:
       - ./scripts:/home/hubot/scripts
     networks:
       - rocket
-      - app         
+      - app
   # this is used to expose the hubot port for notifications on the host on port 3001, e.g. for hubot-jenkins-notifier
     ports:
       - 3001:8080
@@ -72,4 +78,4 @@ networks:
     app:
         external:
             name: app
-    rocket: ~    
+    rocket: ~
